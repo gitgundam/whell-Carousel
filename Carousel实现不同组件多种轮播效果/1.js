@@ -1,14 +1,31 @@
 
-//把原代码转换成构造函数封装
+//设置一个动画函数
+const Animation = {
+  //先对当前效果进行假设!
+   //为了实现图片从左到右,或从右到左,需要拿到两个dom节点,然后设置移动方向,在设置动画
+  //函数需要设置参数,根据需求设置from和to,方向这三个参数
+  slide($from,$to,direction){
+
+  },
+
+  fade($from,$to){
+
+  },
+
+  zoom($from,$to){
+
+  }
+}
 
 class Carousel {
-  constructor($root) {
+  constructor($root,animation) {
     this.$root = $root
     this.$pre = $root.querySelector('.arrow-pre')
     this.$next = $root.querySelector('.arrow-next')
     this.$$indicators = $root.querySelectorAll('.indicators > li')
     this.$$panels = $root.querySelectorAll('.panels > a')
-
+    //把动画函数传递进来.参数animation是Animation.slide,因此属性animation是个函数
+    this.animation = animation//是个函数
     this.bind()
   }
 
@@ -16,22 +33,26 @@ class Carousel {
     let self = this
     
     this.$pre.onclick = function () {
-      let index = self.getPreIndex()
-      self.setPage(index)
-      self.setIndicator(index)
+      //点击上一页按钮,图片把这一页变成上一页.
+      let fromIndex = self.getIndex()
+      let toIndex = self.getPreIndex()
+      self.setPage(fromIndex,toIndex)
+      self.setIndicator(toIndex)//把指示器显示变成上一页的数字下标的位置
     }
 
     this.$next.onclick = function () {
-      let index = self.getNextIndex()
-      self.setPage(index)
-      self.setIndicator(index)
+      let fromIndex = self.getIndex()
+      let toIndex = self.getNextIndex()
+      self.setPage(fromIndex,toIndex)
+      self.setIndicator(toIndex)
     }
 
     this.$$indicators.forEach($Indicator => {
       $Indicator.onclick = function (e) {
-        let index = [...self.$$indicators].indexOf(e.target)
-        self.setIndicator(index)
-        self.setPage(index)
+        let fromIndex = self.getIndex()
+        let toIndex = [...self.$$indicators].indexOf(e.target)
+        self.setIndicator(toIndex)
+        self.setPage(fromIndex,toIndex)
       }
     })
 
@@ -49,9 +70,12 @@ class Carousel {
     return (this.getIndex() + 1) % [...this.$$indicators].length
   }
 
-  setPage(index) {
-    this.$$panels.forEach($panel => $panel.classList.remove('active'))
-    this.$$panels[index].classList.add('active')
+  setPage(fromIndex,toIndex) {
+    //假设已经写好了一个动画,直接调用
+    this.animation()//属性animatio是个动画函数,直接执行它加括号就行
+
+
+
   }
   setIndicator(index) {
     this.$$indicators.forEach($indicator => $indicator.classList.remove('active'))
@@ -61,59 +85,4 @@ class Carousel {
 }
 
 let $carousel = document.querySelector('.carousel')
-new Carousel($carousel)
-/*
-const $ = (s) => document.querySelector(s)
-const $$ = (s) => document.querySelectorAll(s)
-
-const $pre = $('.carousel .arrow-pre')
-const $next = $('.carousel .arrow-next')
-const $$indicators = $$('.carousel .indicators > li')
-const $$panels = $$('.carousel .panels > a')
-
-
-const getIndex = () => [...$$indicators].indexOf($('.carousel .indicators .active'))
-const getPreIndex = () => (getIndex() - 1 + [...$$indicators].length) % [...$$indicators].length
-const getNextIndex = () => (getIndex() + 1 + [...$$indicators].length) % [...$$indicators].length
-
-const setPage = index => {
-  $$panels.forEach($panel => $panel.classList.remove('active'))
-  $$panels[index].classList.add('active')
-}
-
-
-const setIndicator = index => {
-  $$indicators.forEach($indicator => $indicator.classList.remove('active'))
-  $$indicators[index].classList.add('active')
-}
-
-
-$pre.onclick = function () {
-  //先获得上一页页码
-  let index = getPreIndex()
-  //设置当前页面
-  setPage(index)
-  setIndicator(index)
-}
-
-$next.onclick = function () {
-  //先获得上一页页码
-  let index = getNextIndex()
-  //设置当前页面
-  setPage(index)
-  setIndicator(index)
-}
-
-$$indicators.forEach($Indicator => {
-  $Indicator.onclick = function (e) {
-    let index = [...$$indicators].indexOf(e.target)
-    setIndicator(index)
-    setPage(index)
-  }
-});
-*/
-
-
-
-
-
+new Carousel($carousel,Animation.slide)//传递做好的动画效果作为参数进入构造函数构造的对象中
