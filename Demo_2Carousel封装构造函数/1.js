@@ -60,8 +60,12 @@ class Carousel {
 
 }
 
-let $carousel = document.querySelector('.carousel')
-new Carousel($carousel)
+let $$carousel = document.querySelectorAll('.carousel')
+$$carousel.forEach($root => new Carousel($root))
+
+
+
+
 /*
 const $ = (s) => document.querySelector(s)
 const $$ = (s) => document.querySelectorAll(s)
@@ -112,8 +116,6 @@ $$indicators.forEach($Indicator => {
   }
 });
 */
-
-
 
 
 
