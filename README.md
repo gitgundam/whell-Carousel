@@ -1,4 +1,4 @@
-#制作了一个Carousel组件
+# 制作了一个Carousel组件
 
 ## demo1使用js基本实现了轮播图片的功能
 [demo1](https://gitgundam.github.io/whell-Carousel/Demo1_Carousel基础实现轮播效果/1.html)
